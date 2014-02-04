@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+xmlns:android="http://schemas.android.com/apk/res/android"
+           id="org.apache.cordova.ev3"
+      version="0.0.1">
+    <name>Lego EV3</name>
+
+    <description>Cordova Lego EV3 Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova, lego, ev3</keywords>
+    <repo>TODO</repo>
+    <issue>TODO</issue>
+
+    <dependency id="org.apache.cordova.dialogs" url="https://github.com/apache/cordova-plugin-dialogs" />
+
+    <js-module src="www/Promise.js" name="Promise"/>
+    <js-module src="www/Command.js" name="Command"/>
+    <js-module src="www/ByteCodes.js" name="ByteCodes"/>
+    <js-module src="www/Mailbox.js" name="Mailbox"/>
+    <js-module src="www/Connection.js" name="Connection"/>
+    <js-module src="www/Motor.js" name="Motor"/>
+
+    <js-module src="www/EV3.js" name="EV3">
+        <clobbers target="Lego.EV3" />
+    </js-module>
+
+    <!-- windows8 -->
+    <platform name="windows8">
+        <config-file target="package.appxmanifest" parent="/Package/Capabilities">
+            <m2:DeviceCapability Name="bluetooth.rfcomm">
+                <m2:Device Id="any">
+                    <m2:Function Type="name:serialPort" />
+                </m2:Device>
+            </m2:DeviceCapability>
+        </config-file>
+    </platform>
+</plugin>
