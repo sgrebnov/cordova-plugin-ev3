@@ -36,11 +36,16 @@ var Motor = function(port, transport) {
 
     this.port = port;
     this.transport = transport;
+    this.isReversed = false;
 }
 
 Motor.prototype.setSpeed = function(value) {
     var command = new Command(),
         portBitField = outputBitfields[this.port];
+
+    if (this.isReversed) {
+        value = -value;
+    }
 
     command.writeUint8(ByteCodes.OutputSpeed);
     command.writeUint8(0); 
@@ -53,21 +58,21 @@ Motor.prototype.setSpeed = function(value) {
     return this.transport.sendAsync(command);
 }
 
-Motor.prototype.setPower = function(value) {
-    var command = new Command(),
-        portBitField = outputBitfields[this.port];
+// Motor.prototype.setPower = function(value) {
+//     var command = new Command(),
+//         portBitField = outputBitfields[this.port];
 
-    command.writeUint8(ByteCodes.OutputPower);
-    command.writeUint8(0); 
-    command.writeUint8(portBitField);
-    command.writeSByteLong(value);
+//     command.writeUint8(ByteCodes.OutputPower);
+//     command.writeUint8(0); 
+//     command.writeUint8(portBitField);
+//     command.writeSByteLong(value);
 
-    command.writeUint8(ByteCodes.OutputStart);
-    command.writeUint8(0);
-    command.writeUint8(portBitField);
+//     command.writeUint8(ByteCodes.OutputStart);
+//     command.writeUint8(0);
+//     command.writeUint8(portBitField);
 
-    return this.transport.sendAsync(command);
-}
+//     return this.transport.sendAsync(command);
+// }
 
 Motor.prototype.stop = function (breakAfterStop) {
     if (typeof breakAfterStop == 'undefined') {
@@ -83,6 +88,14 @@ Motor.prototype.stop = function (breakAfterStop) {
     command.writeUint8(breakAfterStop);
 
     return this.transport.sendAsync(command);
+}
+
+Motor.prototype.reverse = function (isReversed) {
+    if (typeof isReversed == 'undefined') {
+        this.isReversed = !this.isReversed;
+    } else {
+        this.isReversed = isReversed;
+    }
 }
 
 module.exports = Motor;
