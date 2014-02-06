@@ -9,10 +9,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <description>Cordova Lego EV3 Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova, lego, ev3</keywords>
-    <repo>TODO</repo>
-    <issue>TODO</issue>
+    <repo>https://github.com/sgrebnov/cordova-plugin-ev3</repo>
+    <issue>https://github.com/sgrebnov/cordova-plugin-ev3/issues</issue>
+
+    <engines>
+        <engine name="cordova" version=">=2.9.0" />
+    </engines>
 
     <dependency id="org.apache.cordova.dialogs" url="https://github.com/apache/cordova-plugin-dialogs" />
+    <dependency id="com.megster.cordova.bluetoothserial" url="https://github.com/sgrebnov/BluetoothSerial" />
 
     <js-module src="www/Promise.js" name="Promise"/>
     <js-module src="www/Command.js" name="Command"/>
