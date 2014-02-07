@@ -30,7 +30,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="Lego.EV3" />
     </js-module>
 
-    <!-- windows8 -->
+    <platform name="ios"/>
+
+    <platform name="android"/>
+
+    <platform name="wp8"/>
+
     <platform name="windows8">
         <config-file target="package.appxmanifest" parent="/Package/Capabilities">
             <m2:DeviceCapability Name="bluetooth.rfcomm">
