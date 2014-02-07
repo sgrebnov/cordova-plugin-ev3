@@ -29,7 +29,7 @@ Connection.prototype.connectAsync = function (brickName) {
         deferral.resolve(res);
     };
     var onError = function (err) {
-        deferral.resolve(err);
+        deferral.reject(err);
     };
 
     setTimeout(function () {

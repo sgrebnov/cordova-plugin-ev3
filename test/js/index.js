@@ -20,7 +20,6 @@ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
-        this.robot = new Lego.EV3();
     },
 
     onSuccess: function () {
@@ -37,6 +36,20 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicity call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        app.receivedEvent('deviceready');
+
+        app.robot = new Lego.EV3();
+        
+        app.robot.connect().then(function () {
+            navigator.notification.alert("Successfully connected!");
+        }, app.onError);
+        
         document.getElementById('btnForward').addEventListener('click', function () {
             app.robot.motorA.setSpeed(-20).then(app.onSuccess, app.onError);
         });
@@ -55,18 +68,7 @@ var app = {
         document.getElementById('btnStraight').addEventListener('click', function () {
             app.robot.messaging.send('m1', 'straight').then(app.onSuccess, app.onError);
         });
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-
-        app.robot.connect().then(function () {
-            navigator.notification.alert("Successfully connected!");
-        }, app.onError);
-
+        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
