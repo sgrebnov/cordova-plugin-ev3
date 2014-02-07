@@ -31,18 +31,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <platform name="ios"/>
-
     <platform name="android"/>
-
     <platform name="wp8"/>
-
-    <platform name="windows8">
-        <config-file target="package.appxmanifest" parent="/Package/Capabilities">
-            <m2:DeviceCapability Name="bluetooth.rfcomm">
-                <m2:Device Id="any">
-                    <m2:Function Type="name:serialPort" />
-                </m2:Device>
-            </m2:DeviceCapability>
-        </config-file>
-    </platform>
+    <platform name="windows8"/>
 </plugin>
