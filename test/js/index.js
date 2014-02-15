@@ -63,7 +63,7 @@ var app = {
             app.robot.messaging.send('m1', 'left').then(app.onSuccess, app.onError);
         });
         document.getElementById('btnRight').addEventListener('click', function () {
-            app.messaging.send('m1', 'right').then(app.onSuccess, app.onError);
+            app.robot.messaging.send('m1', 'right').then(app.onSuccess, app.onError);
         });
         document.getElementById('btnStraight').addEventListener('click', function () {
             app.robot.messaging.send('m1', 'straight').then(app.onSuccess, app.onError);
