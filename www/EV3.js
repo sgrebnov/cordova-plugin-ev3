@@ -25,37 +25,70 @@ var Promise = require('./Promise'),
     Mailbox = require('./Mailbox');
     Sensor = require('./Sensor');
 
-var MotorEnum = {};
+var MotorEnum = {
+    MOTOR_A : 0,
+    MOTOR_B : 1,
+    MOTOR_C : 2,
+    MOTOR_D : 3
+};
 
-MotorEnum.MOTOR_A = 0;
-MotorEnum.MOTOR_B = 1;
-MotorEnum.MOTOR_C = 2;
-MotorEnum.MOTOR_D = 3;
+var SensorEnum = {
+    SENSOR_1: 0,
+    SENSOR_2: 1,
+    SENSOR_3: 2,
+    SENSOR_4: 3
+};
 
-var SensorEnum = {};
+// Much thanks to MonoBrick library, http://www.monobrick.dk
+var SensorType = {
+    Unknown : 0,
+    Touch : 16,
+    Color : 29,
+    UltraSonic : 30,
+    Gyro : 32,
+    IR : 33,
+    None : 126,
+}
 
-SensorEnum.SENSOR_1 = 0;
-SensorEnum.SENSOR_2 = 1;
-SensorEnum.SENSOR_3 = 2;
-SensorEnum.SENSOR_4 = 3;
+var SensorMode = {
+    Mode0: 0,
+    Mode1: 1,
+    Mode2: 2,
+    Mode3: 3,
+    Mode4: 4,
+    Mode5: 5,
+    Mode6: 6,
+}
+// Touch sensor modes
+SensorMode.Touch = {
+    Boolean: SensorMode.Mode0,
+    Count: SensorMode.Mode1
+};
+// Color sensor modes
+SensorMode.Color = {
+    Reflection : SensorMode.Mode0, 
+    Ambient  : SensorMode.Mode1,
+    Color  : SensorMode.Mode2,
+    Raw  : SensorMode.Mode3
+}
 
-var SensorType = {}
-
-SensorType.Unknown = 0;
-SensorType.Color = 29;
-SensorType.UltraSonic = 30;
-SensorType.Gyro = 32;
-SensorType.IR = 33;
-SensorType.None = 126;
-
-var SensorMode = {}
-SensorMode.Mode0 = 0;
-SensorMode.Mode1 = 1;
-SensorMode.Mode2 = 2;
-SensorMode.Mode3 = 3;
-SensorMode.Mode4 = 4;
-SensorMode.Mode5 = 5;
-SensorMode.Mode6 = 6;
+// Ultrasonic sensor modes
+SensorMode.Ultrasonic = {
+    Centimeter : SensorMode.Mode0,
+    Inch : SensorMode.Mode1,
+    Listen : SensorMode.Mode2
+}
+// Gyro sensor modes
+SensorMode.Gyro = {
+    Angle : SensorMode.Mode0,
+    AngularVelocity : SensorMode.Mode1
+}
+// IR sensor modes
+SensorMode.IR = {
+    Proximity: SensorMode.Mode0,
+    Seek: SensorMode.Mode1,
+    Remote: SensorMode.Mode1,
+}
 
 var EV3 = function (brickName) {
     this.brickName = brickName || 'ev3'; // uses 'ev3' by default
