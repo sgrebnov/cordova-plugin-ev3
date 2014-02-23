@@ -19,29 +19,31 @@
  *
 */
 
-var ByteCodes = require('./ByteCodes'),
-    Command = require('./Command');
+module.exports = {};
 
-var Mailbox = function(transport) {
-
-    if (typeof transport == 'undefined') {
-        throw new Error('transport is not defined.');
-    }
-
-    this.transport = transport;
-};
-
-Mailbox.prototype.send = function(mailboxName, msg) {
-    var command = Command.createSystem(ByteCodes.WriteMailbox),
-        data = [];
-    
-    command.writeUint8(mailboxName.length + 1); // null terminated string
-    command.writeString(mailboxName);
-
-    command.writeUint16(msg.length + 1); // null terminated string
-    command.writeString(msg);
-    
-    return this.transport.sendAsync(command);
+function roundFloat (val) {
+    return Math.round(val * 100) / 100;
 }
 
-module.exports = Mailbox;
+BitConverter.readFloat32 = function (arr, offset){
+    var ab = new ArrayBuffer(4),
+            dataView = new DataView(ab);
+    for (idx = 0; idx < 4; idx++) {
+        dataView.setUint8(idx, arr[idx + offset]);
+    };
+
+    var value = dataView.getFloat32(0, true); // littleEndian
+    return roundFloat(value);
+}
+
+BitConverter.readInt32 = function (arr, offset) {
+    var ab = new ArrayBuffer(4),
+            dataView = new DataView(ab);
+    for (idx = 0; idx < 4; idx++) {
+        dataView.setUint8(idx, arr[idx + offset]);
+    };
+
+    return dataView.getInt32(0, true); // littleEndian
+}
+
+module.exports = BitConverter;

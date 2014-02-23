@@ -135,7 +135,7 @@
                 // TODO promise is rejected when it's resolved with an instance of error; add check for fnResult instance of Error
                 chainedDefer.resolve(fnResult);
             }
-        });
+        }, 0);
     };
 
 

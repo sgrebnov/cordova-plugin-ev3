@@ -25,8 +25,11 @@ var Connection = function () { };
 
 Connection.prototype.connectAsync = function (brickName) {
     var deferral = new Promise.Deferral();
+    var me = this;
+
     var onSuccess = function (res) {
         deferral.resolve(res);
+        me.subscribe();
     };
     var onError = function (err) {
         deferral.reject(err);
@@ -61,8 +64,12 @@ Connection.prototype.sendAsync = function(command) {
             var header = [];
                 header[0] = bytes.length % 256;
                 header[1] = 0;// TODO: payload.length / 256
-
-            bluetoothSerial.write(header.concat(bytes), onSuccess, onError);
+                if (command.isReplyRequired) {
+                    pendingCommands[command.id] = onSuccess;
+                    bluetoothSerial.write(header.concat(bytes), null, onError);
+                } else {
+                    bluetoothSerial.write(header.concat(bytes), onSuccess, onError);
+                }
         } catch (ex) {
             onError (ex);
         }
@@ -70,4 +77,35 @@ Connection.prototype.sendAsync = function(command) {
 
     return deferral.promise;
 }
+
+var pendingCommands = [];
+
+function onBrickReply (payload) {
+    var id = payload[0] + 256 * payload[1];
+    if (pendingCommands[id]) {
+        pendingCommands[id](payload);
+        delete pendingCommands[id];
+    }
+};
+
+Connection.prototype.subscribe = function () {
+    var me = this;
+
+    bluetoothSerial.read(function (header) {
+        var size = header[0] + 256 * header[1];
+        bluetoothSerial.read(function (payload) {
+            onBrickReply(payload);
+
+            setTimeout(function () {
+                // TODO rewrite
+                me.subscribe();
+            });
+
+        }, function () {
+        }, size);
+    }, function () {
+        console.log('subscribe error');
+    }, 2);
+};
+
 module.exports = Connection;

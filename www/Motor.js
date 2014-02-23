@@ -40,7 +40,7 @@ var Motor = function(port, transport) {
 }
 
 Motor.prototype.setSpeed = function(value) {
-    var command = new Command(),
+    var command = Command.createDirect(),
         portBitField = outputBitfields[this.port];
 
     if (this.isReversed) {
@@ -58,8 +58,24 @@ Motor.prototype.setSpeed = function(value) {
     return this.transport.sendAsync(command);
 }
 
+Motor.prototype.getSpeed = function() {
+
+    var command = Command.createDirect(true, 8, 0);
+
+    command.writeUint8(ByteCodes.OutputRead);
+    command.writeUint8(0); 
+    command.writeUint8(this.port);
+
+    command.writeUint8(0+96);
+    command.writeUint8(4+96);
+    
+    return this.transport.sendAsync(command).then(function (reply) {
+        return reply[3];
+    });
+}
+
 // Motor.prototype.setPower = function(value) {
-//     var command = new Command(),
+//     var command = Command.createDirect(),
 //         portBitField = outputBitfields[this.port];
 
 //     command.writeUint8(ByteCodes.OutputPower);
@@ -79,7 +95,7 @@ Motor.prototype.stop = function (breakAfterStop) {
         breakAfterStop = 0;
     }
 
-    var command = new Command(),
+    var command = Command.createDirect(),
         portBitField = outputBitfields[this.port];
 
     command.writeUint8(ByteCodes.OutputStop);

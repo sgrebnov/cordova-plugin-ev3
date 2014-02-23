@@ -21,18 +21,32 @@
 
 var commandSequenceNumber = 0;
 
-var Command = function (systemCommand) {
+var Command = function (isReplyRequired, commandType) {
     this.buf = [];
-    this.writeUint16(++commandSequenceNumber); // command id
+    this.isReplyRequired = isReplyRequired || false;
+    this.id = ++commandSequenceNumber;
+    
+    this.writeUint16(this.id);
+    this.writeUint8(commandType);
+}
 
-    if (typeof systemCommand != 'undefined') {
-        this.writeUint8(129);
-        this.writeUint8(systemCommand);
-    }
-    else { // direct command
-        this.writeUint8(128);
-        this.writeUint16(0); // global memory
-    }
+
+Command.createDirect = function (isReplyRequired, globalSize, localSize) {
+    var cmd = new Command(isReplyRequired, isReplyRequired ? 0 : 128);
+
+    globalSize = globalSize || 0;
+    localSize = localSize || 0;
+
+    cmd.writeUint8(globalSize & 0xFF);
+    cmd.writeUint8((localSize << 2) | (globalSize >> 8));
+
+    return cmd;
+}
+
+Command.createSystem = function (systemCommand) {
+    var cmd = new Command(false, 129);
+    cmd.writeUint8(systemCommand);
+    return cmd;
 }
 
 Command.prototype.writeUint8 = function(val) {
