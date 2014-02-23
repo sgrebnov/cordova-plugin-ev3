@@ -21,15 +21,6 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
-
-    onSuccess: function () {
-        console.log('success');
-    },
-
-    onError: function (err) {
-        navigator.notification.alert("Error: " + err);
-    },
-
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -37,6 +28,28 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
+
+    onSuccess: function () {
+        console.log('command executed successfully');
+    },
+
+    onError: function (err) {
+        navigator.notification.alert("Error: " + err);
+    },
+
+    onSensorChanged: function (sensor, val) {
+        console.log('Sensor ' + (sensor.port + 1) + ' value changed: ' + val);
+    },
+
+    onConnectedToEv3: function () {
+        navigator.notification.alert("Successfully connected!");
+
+        app.robot.sensor1.subscribeValueChanged(app.onSensorChanged, app);
+        app.robot.sensor2.subscribeValueChanged(app.onSensorChanged, app);
+        app.robot.sensor3.subscribeValueChanged(app.onSensorChanged, app);
+        app.robot.sensor4.subscribeValueChanged(app.onSensorChanged, app);
+    },
+
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
@@ -45,19 +58,16 @@ var app = {
         app.receivedEvent('deviceready');
 
         app.robot = new Lego.EV3();
-        
-        app.robot.connect().then(function () {
-            navigator.notification.alert("Successfully connected!");
-        }, app.onError);
-        
+        app.robot.connect().then(app.onConnectedToEv3, app.onError);
+
         document.getElementById('btnForward').addEventListener('click', function () {
-            app.robot.motorA.setSpeed(-20).then(app.onSuccess, app.onError);
+            app.robot.motorA.setSpeed(-20);
         });
         document.getElementById('btnBackward').addEventListener('click', function () {
-            app.robot.motorA.setSpeed(20).then(app.onSuccess, app.onError);
+            app.robot.motorA.setSpeed(20);
         });
         document.getElementById('btnStop').addEventListener('click', function () {
-            app.robot.motorA.stop().then(app.onSuccess, app.onError);
+            app.robot.motorA.stop();
         });
         document.getElementById('btnLeft').addEventListener('click', function () {
             app.robot.messaging.send('m1', 'left').then(app.onSuccess, app.onError);
@@ -68,7 +78,6 @@ var app = {
         document.getElementById('btnStraight').addEventListener('click', function () {
             app.robot.messaging.send('m1', 'straight').then(app.onSuccess, app.onError);
         });
-        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {

@@ -22,9 +22,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <js-module src="www/Promise.js" name="Promise"/>
     <js-module src="www/Command.js" name="Command"/>
     <js-module src="www/ByteCodes.js" name="ByteCodes"/>
+    <js-module src="www/BitConverter.js" name="BitConverter"/>
     <js-module src="www/Mailbox.js" name="Mailbox"/>
     <js-module src="www/Connection.js" name="Connection"/>
     <js-module src="www/Motor.js" name="Motor"/>
+    <js-module src="www/Sensor.js" name="Sensor"/>
 
     <js-module src="www/EV3.js" name="EV3">
         <clobbers target="Lego.EV3" />
