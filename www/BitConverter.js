@@ -25,6 +25,8 @@ function roundFloat (val) {
     return Math.round(val * 100) / 100;
 }
 
+BitConverter = {};
+
 BitConverter.readFloat32 = function (arr, offset){
     var ab = new ArrayBuffer(4),
             dataView = new DataView(ab);

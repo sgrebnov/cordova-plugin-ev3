@@ -93,7 +93,7 @@ Sensor.prototype.readSi = function () {
     cmd.writeUint8(0+96);
 
     return this.transport.sendAsync(cmd).then(function (reply) {
-        var value = BitConverter.readFloat32(reply, 3);
+        return BitConverter.readFloat32(reply, 3);
     });
 }
 
