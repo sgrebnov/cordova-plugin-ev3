@@ -29,7 +29,7 @@ Connection.prototype.connectAsync = function (brickName) {
 
     var onSuccess = function (res) {
         deferral.resolve(res);
-        me.subscribe();
+        //me.subscribe();
     };
     var onError = function (err) {
         deferral.reject(err);
